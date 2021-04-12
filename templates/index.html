@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+
+
+
+{% block content %}
+<h1>
+      <center>GridSearched</center>
+</h1>
+<table>
+{% for key,item in scores.items() %}
+<tr>
+      <td> {{key}} </td>
+      <td> {{item}} </td>
+</tr>
+
+{% endfor %}
+</table>
+
+
+
+{% endblock %}
+
+
+
+
