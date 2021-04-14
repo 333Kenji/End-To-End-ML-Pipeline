@@ -1,4 +1,4 @@
-#Training The Machine End To End
+# Training The Machine, End To End
 
 Overview
 
