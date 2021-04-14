@@ -103,8 +103,8 @@ def ti_sig_feats(ticker):
 
     Args:
         ticker ([string]): [user input string, primarily present to be
-        passed into api call function for use, and also as remnant of former indexing of 'db' which
-        had tables for multiple tables.]
+        passed into API call function for use, and also as remnant of
+        former indexing of 'db' which had tables for multiple tables.]
 
     Returns:
         [pandas DataFrame]: [Same table from above function but with new features for making
@@ -145,6 +145,18 @@ def ti_sig_feats(ticker):
 
 @app.route('/', methods=('POST', 'GET'))
 def data_splitter(ticker):
+    """[creates dict where keys are tickers and their values are 
+        all their particular.containing all tables associated with
+        a tic.
+        Then creates new tables by indexing into the db object at
+        hard coded dates. //    ]
+
+    Args:
+        ticker ([string]): [user input string]
+
+    Returns:
+        [tuple]: [test + train, train, test]
+    """    
     
     #train_start = '2020-11-08'
 
@@ -177,8 +189,17 @@ def data_splitter(ticker):
     all_train = pd.concat(master_test)
     return tables, train, test
 
+
 @app.route('/', methods=('POST', 'GET'))
 def X_y(ticker):
+    """[Generates target array and features matrix for text and train sets]
+
+    Args:
+        ticker ([string]): [user input string]
+
+    Returns:
+        [tuple: [feature-target split for test and train]
+    """    
     tables, train, test = data_splitter(ticker)
 
     X_train = train[['Open', 'High','Low','Adjusted Close','Volume','MACD','MACD_Hist','MACD_Signal','Real Middle Band','Real Upper Band','Real Lower Band','change','crossover','thresh', 'RSI', 'SMA', 'ROC']].copy()
@@ -196,6 +217,16 @@ def X_y(ticker):
 
 @app.route('/', methods=('POST', 'GET'))
 def gridsearch(ticker):
+    """[Iterates through dictionary of models:parameters, instantiating,
+        fitting, and storing predictions and scores for each.]
+
+    Args:
+        ticker ([string]): [user input string passed through to 
+            function call via html form request.]
+
+    Returns:
+        [html]: [page displaying GridSearchCV output in table format.]
+    """    
     scores = {
         'Ticker':ticker
         }
@@ -206,8 +237,8 @@ def gridsearch(ticker):
         'Parameters': {
             'n_estimators': range(1,70),
             'criterion': ['gini','entropy'],
-            'min_samples_split':[200, 220, 300], #not sure but for val curves
-            'min_samples_leaf': [50, 150, 200],
+            'min_samples_split':[150, 220, 300], #not sure but for val curves
+            'min_samples_leaf': [50, 150, 220],
             'max_features': ['sqrt'],
 
             
